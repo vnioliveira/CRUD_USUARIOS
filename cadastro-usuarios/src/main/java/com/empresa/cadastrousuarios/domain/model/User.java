@@ -1,12 +1,12 @@
 package com.empresa.cadastrousuarios.domain.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,8 +30,9 @@ public class User {
     @Column(nullable = false, name = "senha")
     private String senha;
 
-//    @Column(name = "foto")
-//    private byte[] foto;
+    @OneToOne
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
 
     @Column(length = 8, name = "cep")
     private String cep;

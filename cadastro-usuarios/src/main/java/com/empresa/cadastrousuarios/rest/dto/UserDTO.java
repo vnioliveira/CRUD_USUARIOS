@@ -13,7 +13,6 @@ public class UserDTO {
 
     private String nome;
     private String username;
-    private String senha;
 //    private String foto;
     private String cep;
     private String email;
@@ -21,5 +20,6 @@ public class UserDTO {
     private String sexo;
     private String tipoUsuario;
     private String cpfCnpj;
+    private EnderecoDTO endereco;
 
 }

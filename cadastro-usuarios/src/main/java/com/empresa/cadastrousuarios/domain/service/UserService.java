@@ -1,20 +1,27 @@
 package com.empresa.cadastrousuarios.domain.service;
 
+import com.empresa.cadastrousuarios.domain.model.Endereco;
 import com.empresa.cadastrousuarios.domain.model.User;
 import com.empresa.cadastrousuarios.domain.repository.UserRepository;
 import com.empresa.cadastrousuarios.rest.dto.UserDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class UserService {
 
     private final UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    private final EnderecoService enderecoService;
+
+    public UserService(UserRepository repository, EnderecoService enderecoService) {
         this.repository = repository;
+        this.enderecoService = enderecoService;
     }
 
     public List<UserDTO> listarUsuarios() {
@@ -27,35 +34,52 @@ public class UserService {
 
     public UserDTO buscarUsuarioPorId(Long id) {
         User usuario = repository.findById(id).orElse(null);
+
         assert usuario != null;
         return buildUserDTO(usuario);
     }
 
-    public User cadastrarUsuario(UserDTO usuarioRequest) {
+    public void cadastrarUsuario(@Validated UserDTO usuarioRequest) {
+
+        Endereco endereco = enderecoService.cadastrarEndereco(usuarioRequest.getEndereco());
         User user = builUser(usuarioRequest);
-        return repository.save(user);
+        user.setEndereco(endereco);
+        repository.save(user);
+
     }
 
 
-    public UserDTO atualizarUsuario(Long id, UserDTO usuarioRequest) {
+    public ResponseEntity<Object> atualizarUsuario(Long id, UserDTO usuarioRequest) {
         if (repository.existsById(id)) {
             User usuarioAtualizado = builUser(usuarioRequest);
             usuarioAtualizado.setId(id);
             User usuarioSalvo = repository.save(usuarioAtualizado);
-            return buildUserDTO(usuarioSalvo);
+            return ResponseEntity.noContent().build();
         }
-        return null;
+        return ResponseEntity.notFound().build();
     }
 
-    public void removerUsuario(Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<Object> removerUsuario(Long id) {
+        UserDTO userDTO = buscarUsuarioPorId(id);
+        if (userDTO != null){
+            repository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+
+    public ResponseEntity<UserDTO> buscarUsuarioPorNome(String nome) {
+        User user = repository.getUserByNome(nome);
+        UserDTO userDTO = buildUserDTO(user);
+        return ResponseEntity.ok(userDTO);
     }
 
     private static User builUser(UserDTO usuarioRequest) {
         return User.builder()
                 .nome(usuarioRequest.getNome())
                 .username(usuarioRequest.getUsername())
-                .senha(usuarioRequest.getSenha())
 //                .foto(converterParaBytes(usuarioRequest))
                 .cep(usuarioRequest.getCep())
                 .email(usuarioRequest.getEmail())
@@ -70,13 +94,13 @@ public class UserService {
         return UserDTO.builder()
                 .nome(usuario.getNome())
                 .username(usuario.getUsername())
-                .senha(usuario.getSenha())
                 .cep(usuario.getCep())
                 .email(usuario.getEmail())
                 .dataNascimento(usuario.getDataNascimento())
                 .sexo(usuario.getSexo())
                 .tipoUsuario(usuario.getTipoUsuario())
                 .cpfCnpj(usuario.getCpfCnpj())
+                .endereco(enderecoService.buildEnderecoDTO(usuario.getEndereco()))
                 .build();
     }
 

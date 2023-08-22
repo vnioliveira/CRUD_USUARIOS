@@ -1,10 +1,11 @@
 package com.empresa.cadastrousuarios.domain.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "enderecos")
@@ -32,4 +33,5 @@ public class Endereco {
 
     @Column(length = 2, name = "estado")
     private String estado;
+
 }
