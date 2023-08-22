@@ -14,4 +14,24 @@ ao rodar a aplicação o Swagger será mostrado no link abaixo
 
 http://localhost:8080/swagger-ui
 
+## Requirements
+
+Para construir e executar a aplicação, você precisa
+
+- [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Maven 3](https://maven.apache.org)
+
+##Executando a aplicação localmente
+
+Existem várias maneiras de executar uma aplicação Spring Boot em sua máquina local. Uma maneira é executar o `main` metodo no package `package com.empresa.cadastrousuarios.CadastroUsuariosApplication` class atraves da sua IDE.
+
+Alternativamente você pode usar o [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
+
+```shell
+mvn spring-boot:run
+```
+
+
+
+
 
