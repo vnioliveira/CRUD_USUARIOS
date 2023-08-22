@@ -4,12 +4,10 @@ import com.empresa.cadastrousuarios.domain.service.EnderecoService;
 import com.empresa.cadastrousuarios.rest.dto.EnderecoDTO;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/enderecos")
@@ -17,11 +15,6 @@ import java.util.List;
 public class EnderecoResource {
 
     private final EnderecoService service;
-
-    @GetMapping
-    public List<EnderecoDTO> listarEnderecos() {
-        return service.listarEnderecos();
-    }
 
     @GetMapping("/{id}")
     public EnderecoDTO buscarEnderecoPorId(@PathVariable Long id) {

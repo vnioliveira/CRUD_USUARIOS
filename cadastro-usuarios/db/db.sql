@@ -1,7 +1,7 @@
 CREATE
 DATABASE cadastro_usuarios;
 
-CREATE TABLE endereco
+CREATE TABLE enderecos
 (
     id         SERIAL PRIMARY KEY,
     cep        VARCHAR(8),
@@ -11,8 +11,7 @@ CREATE TABLE endereco
     estado     VARCHAR(2)
 );
 
-
-CREATE TABLE users
+CREATE TABLE usuarios
 (
     id              SERIAL PRIMARY KEY,
     nome            VARCHAR(100) NOT NULL,
@@ -26,6 +25,6 @@ CREATE TABLE users
     tipo            VARCHAR(20)  NOT NULL,
     cpf_cnpj        VARCHAR(14),
     endereco_id     BIGINT,
-    FOREIGN KEY (endereco_id) REFERENCES endereco (id)
+    FOREIGN KEY (endereco_id) REFERENCES enderecos (id)
 );
 

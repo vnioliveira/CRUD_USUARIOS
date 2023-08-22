@@ -1,48 +1,48 @@
 package com.empresa.cadastrousuarios.domain.service;
 
-import com.empresa.cadastrousuarios.domain.mapper.UserMapper;
 import com.empresa.cadastrousuarios.domain.model.User;
 import com.empresa.cadastrousuarios.domain.repository.UserRepository;
 import com.empresa.cadastrousuarios.rest.dto.UserDTO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
-
 
     private final UserRepository repository;
 
-    private final UserMapper mapper;
+    public UserService(UserRepository repository) {
+        this.repository = repository;
+    }
 
     public List<UserDTO> listarUsuarios() {
         List<User> usuarios = repository.findAll();
+
         return usuarios.stream()
-                .map(mapper::toDto)
+                .map(this::buildUserDTO)
                 .collect(Collectors.toList());
     }
 
     public UserDTO buscarUsuarioPorId(Long id) {
         User usuario = repository.findById(id).orElse(null);
-        return mapper.toDto(usuario);
+        assert usuario != null;
+        return buildUserDTO(usuario);
     }
 
-    public UserDTO cadastrarUsuario(UserDTO usuarioRequest) {
-        User usuario = mapper.toEntity(usuarioRequest);
-        User usuarioSalvo = repository.save(usuario);
-        return mapper.toDto(usuarioSalvo);
+    public User cadastrarUsuario(UserDTO usuarioRequest) {
+        User user = builUser(usuarioRequest);
+        return repository.save(user);
     }
+
 
     public UserDTO atualizarUsuario(Long id, UserDTO usuarioRequest) {
         if (repository.existsById(id)) {
-            User usuarioAtualizado = mapper.toEntity(usuarioRequest);
+            User usuarioAtualizado = builUser(usuarioRequest);
             usuarioAtualizado.setId(id);
             User usuarioSalvo = repository.save(usuarioAtualizado);
-            return mapper.toDto(usuarioSalvo);
+            return buildUserDTO(usuarioSalvo);
         }
         return null;
     }
@@ -50,5 +50,35 @@ public class UserService {
     public void removerUsuario(Long id) {
         repository.deleteById(id);
     }
+
+    private static User builUser(UserDTO usuarioRequest) {
+        return User.builder()
+                .nome(usuarioRequest.getNome())
+                .username(usuarioRequest.getUsername())
+                .senha(usuarioRequest.getSenha())
+//                .foto(converterParaBytes(usuarioRequest))
+                .cep(usuarioRequest.getCep())
+                .email(usuarioRequest.getEmail())
+                .dataNascimento(usuarioRequest.getDataNascimento())
+                .sexo(usuarioRequest.getSexo())
+                .tipoUsuario(usuarioRequest.getTipoUsuario())
+                .cpfCnpj(usuarioRequest.getCpfCnpj())
+                .build();
+    }
+
+    private UserDTO buildUserDTO(User usuario) {
+        return UserDTO.builder()
+                .nome(usuario.getNome())
+                .username(usuario.getUsername())
+                .senha(usuario.getSenha())
+                .cep(usuario.getCep())
+                .email(usuario.getEmail())
+                .dataNascimento(usuario.getDataNascimento())
+                .sexo(usuario.getSexo())
+                .tipoUsuario(usuario.getTipoUsuario())
+                .cpfCnpj(usuario.getCpfCnpj())
+                .build();
+    }
+
 }
 

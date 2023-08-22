@@ -2,66 +2,53 @@ package com.empresa.cadastrousuarios.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "usuarios")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, name = "nome")
     private String nome;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50, name = "username")
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "senha")
     private String senha;
 
-    @Lob
-    private byte[] foto;
+//    @Column(name = "foto")
+//    private byte[] foto;
 
-    @Column(length = 8) // Pode ser ajustado conforme a necessidade
+    @Column(length = 8, name = "cep")
     private String cep;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 100, name = "email")
     private String email;
 
-    @Column(nullable = false)
-    private LocalDate dataNascimento;
+    @Column(nullable = false, name = "data_nascimento")
+    private LocalDateTime dataNascimento;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Sexo sexo;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoUsuario tipo;
-
-    @Column(length = 14)
+    @Column(length = 14, name = "cpf_cnpj")
     private String cpfCnpj;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
+    @Column(name = "sexo", nullable = false)
+    public String sexo;
 
-    // Enum para Sexo
-    public enum Sexo {
-        MASCULINO, FEMININO
-    }
-
-    // Enum para TipoUsuario
-    public enum TipoUsuario {
-        PESSOA_FISICA, PESSOA_JURIDICA
-    }
+    @Column(name = "tipo", nullable = false)
+    public String tipoUsuario;
 }
 

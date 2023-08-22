@@ -1,5 +1,10 @@
 package com.empresa.cadastrousuarios.rest.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
 public class EnderecoDTO {
 
     private String cep;
