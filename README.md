@@ -25,7 +25,7 @@ Para construir e executar a aplicação, você precisa
 
 Existem várias maneiras de executar uma aplicação Spring Boot em sua máquina local. Uma maneira é executar o `main` metodo no package `package com.empresa.cadastrousuarios.CadastroUsuariosApplication` class atraves da sua IDE.
 
-Alternativamente você pode usar o [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
+Alternativamente você pode usar o [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) :
 
 ```shell
 mvn spring-boot:run
